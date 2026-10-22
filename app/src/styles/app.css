@@ -1,0 +1,36 @@
+/* App-level overrides on top of the Industry design system (industry.css). */
+:root {
+  --font-heading: "Barlow Condensed", "Anuphan", system-ui, sans-serif;
+  --font-body: "Barlow", "Sarabun", system-ui, sans-serif;
+}
+body { margin: 0; background: var(--color-bg); }
+a { color: var(--color-accent-700); }
+a:hover { color: var(--color-accent-900); }
+button { font-family: inherit; }
+.btn { white-space: nowrap; flex-shrink: 0; }
+.seg { flex: none; max-width: none; }
+.seg-opt { white-space: nowrap; }
+.input:disabled { opacity: 0.6; }
+
+.hnum { font-family: var(--font-heading); font-weight: 600; }
+.mono { font-family: ui-monospace, Menlo, monospace; }
+.line-top { border-top: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent); }
+.line-bottom { border-bottom: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent); }
+
+/* Unstyled button used for rows, cells and list items. */
+.plain { border: none; background: transparent; cursor: pointer; color: inherit; text-align: left; padding: 0; }
+.hover-text:hover { background: color-mix(in srgb, var(--color-text) 4%, transparent); }
+.hover-accent:hover { background: color-mix(in srgb, var(--color-accent) 6%, transparent); }
+.hover-side:hover { background: color-mix(in srgb, var(--color-neutral-100) 10%, transparent); }
+.chip:not(.on):hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+
+.link-btn { border: none; background: none; padding: 0; cursor: pointer; color: var(--color-accent-700); font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
+.link-btn:hover { color: var(--color-accent-900); }
+
+.notice { font-size: 13px; background: var(--color-accent-100); color: var(--color-accent-900); padding: 8px 10px; }
+.notice-strong { font-size: 13px; background: var(--color-accent-200); color: var(--color-accent-900); padding: 8px 10px; }
+
+@media print {
+  [data-noprint] { display: none !important; }
+  body { background: #fff; }
+}
