@@ -17,8 +17,9 @@ npm run build      # static site in dist/ — host anywhere (GitHub Pages, Netli
 One-time setup in the repository settings:
 1. **Settings › Pages › Build and deployment › Source: GitHub Actions.** Pages for a private repository
    needs a paid GitHub plan; otherwise make the repository public (it contains only fictional sample data).
-2. Optional: **Settings › Secrets and variables › Actions › Variables › New variable** `SHEET_API_URL` =
-   the Apps Script `/exec` URL, then re-run the workflow (Actions › Deploy to GitHub Pages › Run workflow).
+2. The Apps Script `/exec` URL baked into the site lives in `app/.env.production`. To use another one, edit
+   that file, or set the repository variable `SHEET_API_URL` (Settings › Secrets and variables › Actions ›
+   Variables), which takes precedence, and re-run the workflow.
 
 The site will be at `https://<owner>.github.io/student-care-system/`.
 

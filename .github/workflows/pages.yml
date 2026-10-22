@@ -33,9 +33,13 @@ jobs:
           cache-dependency-path: app/package-lock.json
       - run: npm ci
       - run: npm test
-      - run: npm run build
+      - name: Build
+        # Uses app/.env.production unless the SHEET_API_URL repository variable is set.
+        run: |
+          if [ -n "$SHEET_API_URL" ]; then export VITE_SHEET_API_URL="$SHEET_API_URL"; fi
+          npm run build
         env:
-          VITE_SHEET_API_URL: ${{ vars.SHEET_API_URL }}
+          SHEET_API_URL: ${{ vars.SHEET_API_URL }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
