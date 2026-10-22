@@ -31,7 +31,7 @@ export function Portal({ auth }: { auth: PortalAuth }) {
       setDone(shortDate());
       window.scrollTo(0, 0);
     } catch (e) {
-      setErr('ส่งไม่สำเร็จ ' + apiMessage(e) + ' คำตอบยังอยู่ครบ กรุณาลองอีกครั้ง');
+      setErr('ยังส่งแบบประเมินไม่สำเร็จ: ' + apiMessage(e) + ' · คำตอบยังอยู่ครบ กดส่งอีกครั้งได้เลย');
     }
     setBusy(false);
   };

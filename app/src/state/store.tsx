@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { IDLE_LOGOUT_MS } from '../config';
-import { ApiError, apiMessage, sheetsApi } from '../api/sheets';
+import { ApiError, apiMessage, isTransient, sheetsApi } from '../api/sheets';
 import { makeSampleStudents } from '../data/sample';
 import { currentTerm, stamp } from '../domain/dates';
 import type { SdqRecord } from '../domain/sdq';
@@ -155,7 +155,13 @@ function useStoreValue() {
         endSession(apiMessage(e));
         return false;
       }
-      setSync((s) => ({ ...s, status: 'error', msg: 'ส่งข้อมูลขึ้น Sheets ไม่สำเร็จ ' + apiMessage(e) + ' · ระบบจะลองใหม่เมื่อมีการแก้ไขครั้งถัดไป' }));
+      // Temporary problems retry on their own; the change stays saved in this browser meanwhile.
+      const retry = isTransient(e);
+      if (retry) pushTimer.current = setTimeout(() => { flush(); }, 30000);
+      setSync((s) => ({
+        ...s, status: 'error',
+        msg: `ยังส่งการแก้ไขขึ้น Google Sheets ไม่สำเร็จ: ${apiMessage(e)} · การแก้ไขยังเก็บไว้ในเครื่องนี้ ${retry ? 'ระบบจะลองส่งใหม่อัตโนมัติใน 30 วินาที หรือกด "ส่งข้อมูลขึ้น Sheets ตอนนี้"' : 'แก้ไขตามข้อความแล้วกด "ส่งข้อมูลขึ้น Sheets ตอนนี้"'}`,
+      }));
       return false;
     }
   }, [apiUrl, endSession]);
@@ -202,7 +208,7 @@ function useStoreValue() {
       else if (merged.count) toast(`รับคำตอบ SDQ จาก Google Sheets ${merged.count} รายการ`);
     } catch (e) {
       if (e instanceof ApiError && e.code === 'session') return endSession(apiMessage(e));
-      if (!silent) setSync((s) => ({ ...s, msg: 'รับคำตอบไม่สำเร็จ ' + apiMessage(e) }));
+      if (!silent) setSync((s) => ({ ...s, msg: 'รับคำตอบจากผู้ปกครอง/นักเรียนไม่สำเร็จ: ' + apiMessage(e) }));
     }
   }, [apiUrl, commit, endSession, toast]);
 
@@ -238,7 +244,7 @@ function useStoreValue() {
       });
     } catch (e) {
       if (e instanceof ApiError && e.code === 'session') return endSession(apiMessage(e));
-      setSync((s) => ({ ...s, msg: 'ดึงข้อมูลไม่สำเร็จ ' + apiMessage(e) }));
+      setSync((s) => ({ ...s, msg: 'ดึงข้อมูลจาก Google Sheets ไม่สำเร็จ: ' + apiMessage(e) + ' · ข้อมูลในเครื่องนี้ยังอยู่ครบ' }));
     }
   }, [apiUrl, ask, endSession]);
 
