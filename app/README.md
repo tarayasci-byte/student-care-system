@@ -12,6 +12,16 @@ npm test           # unit + UI tests (vitest)
 npm run build      # static site in dist/ — host anywhere (GitHub Pages, Netlify, …)
 ```
 
+## Publishing (GitHub Pages)
+`.github/workflows/pages.yml` tests, builds and publishes `app/` on every push to `main`.
+One-time setup in the repository settings:
+1. **Settings › Pages › Build and deployment › Source: GitHub Actions.** Pages for a private repository
+   needs a paid GitHub plan; otherwise make the repository public (it contains only fictional sample data).
+2. Optional: **Settings › Secrets and variables › Actions › Variables › New variable** `SHEET_API_URL` =
+   the Apps Script `/exec` URL, then re-run the workflow (Actions › Deploy to GitHub Pages › Run workflow).
+
+The site will be at `https://<owner>.github.io/student-care-system/`.
+
 ## Screens
 Login (teacher / student / parent) · หน้าหลัก · นักเรียน · โปรไฟล์ · คัดกรอง SDQ (results + 3-assessor form) ·
 เยี่ยมบ้าน (4 sections + risk score) · ช่วยเหลือ/ส่งต่อ · รายงานสรุป (printable) · ข้อมูลและสำรอง.
